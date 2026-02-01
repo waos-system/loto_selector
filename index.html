@@ -3,302 +3,295 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ロト番号選択 - 占い式数字生成</title>
+<title>ロト予想</title>
 
 <style>
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
 body {
-  font-family: 'Yu Gothic', sans-serif;
-  background: linear-gradient(135deg,#667eea,#764ba2);
-  padding:20px;
+  font-family: "Yu Gothic", sans-serif;
+  background: #40cfd0; /* ターコイズブルー */
+  margin: 0;
+  padding: 20px;
 }
 
 .container {
-  max-width:800px;
-  background:#fff;
-  margin:auto;
-  border-radius:20px;
-  padding:40px;
+  max-width: 600px;
+  margin: 0 auto;
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
 }
 
-label {
-  font-weight:bold;
-  display:block;
-  margin-top:10px;
+/* 見出し */
+h2 {
+  text-align: center;
+  margin-bottom: 16px;
 }
 
-/* テキスト入力系 */
-input[type="text"],
-input[type="date"],
-select {
-  width:100%;
-  padding:12px;
-  margin-top:6px;
-  margin-bottom:15px;
+/* 入力 */
+input, select {
+  width: 100%;
+  padding: 8px;
+  margin: 6px 0;
+  font-size: 1em;
 }
 
-/* checkbox専用 */
 input[type="checkbox"] {
-  width:auto;
-  margin-right:8px;
+  width: auto;
+  margin-right: 6px;
 }
 
-.button-group {
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:15px;
-  margin-top:25px;
-}
-
+/* ボタン */
 button {
-  padding:15px;
-  font-size:16px;
-  font-weight:bold;
-  border:none;
-  border-radius:8px;
-  cursor:pointer;
+  width: 100%;
+  padding: 10px;
+  margin-top: 8px;
+  cursor: pointer;
+  border: none;
+  border-radius: 6px;
+  font-size: 1em;
 }
 
-.btn-loto6 {
-  background:linear-gradient(135deg,#f093fb,#f5576c);
-  color:#fff;
+button.loto6 {
+  background: #ff9800;
+  color: #fff;
 }
 
-.btn-loto7 {
-  background:linear-gradient(135deg,#4facfe,#00f2fe);
-  color:#fff;
+button.loto7 {
+  background: #3f51b5;
+  color: #fff;
 }
 
-.results {
-  margin-top:40px;
+button.sub {
+  width: auto;
+  padding: 4px 10px;
+  font-size: 0.85em;
+  background: #ccc;
 }
 
-.result-card {
-  background:linear-gradient(135deg,#f5f7fa,#c3cfe2);
-  border-radius:12px;
-  padding:25px;
-  margin-bottom:20px;
+/* 保存表示 */
+.storage-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
 }
 
-.numbers {
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  margin-top:10px;
+.notice {
+  font-size: 0.85em;
+  color: #008000;
 }
 
-.number-ball {
-  width:50px;
-  height:50px;
-  border-radius:50%;
-  background:linear-gradient(135deg,#667eea,#764ba2);
-  color:#fff;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:bold;
+/* チェック */
+label {
+  display: flex;
+  align-items: center;
+  margin: 8px 0;
 }
 
-.reasoning {
-  background:#fff;
-  margin-top:15px;
-  padding:15px;
-  border-radius:8px;
-  border-left:4px solid #667eea;
+/* ===== 結果表示（〇で囲む：元の方式） ===== */
+#result {
+  margin-top: 12px;
 }
 
-.reasoning-title {
-  font-weight:bold;
-  color:#667eea;
-  margin-bottom:8px;
+.result-line {
+  display: flex;
+  align-items: center;
+  margin: 8px 0;
 }
 
-.reasoning-item {
-  font-size:0.9em;
-  color:#555;
+.ball {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  margin-right: 6px;
 }
 
-.slider-label {
-  display:flex;
-  justify-content:space-between;
-  font-size:0.85em;
-  color:#555;
-  margin-bottom:10px;
-}
 
+/* フッター */
 .footer {
-  text-align:center;
-  margin-top:30px;
-  padding-top:20px;
-  border-top:1px solid #ddd;
-  font-size:0.9em;
+  text-align: center;
+  margin-top: 20px;
+  font-size: 0.85em;
 }
 
-.footer a {
-  color:#667eea;
-  text-decoration:none;
+/* Cookie */
+.cookie-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #222;
+  color: #fff;
+  padding: 10px;
+  font-size: 0.85em;
+  display: none;
+  text-align: center;
 }
 
-.footer span {
-  margin:0 10px;
-  color:#999;
+.cookie-banner button {
+  width: auto;
+  margin-left: 10px;
+  padding: 4px 10px;
 }
 </style>
 </head>
 
 <body>
 <div class="container">
-  <h1 style="text-align:center;color:#667eea;">🔮 ロト番号選択システム</h1>
+<h2>ロト番号生成</h2>
 
-  <label>お名前</label>
-  <input id="name" type="text">
+<input id="name" placeholder="名前">
+<input id="birthdate" type="date">
 
-  <label>生年月日</label>
-  <input id="birthdate" type="date">
-
-  <label>抽選日</label>
-  <input id="drawDate" type="date">
-
-  <label>生成パターン数</label>
-  <select id="patterns">
-    <option value="1" selected>1</option>
-    <option value="2">2</option>
-    <option value="3">3</option>
-    <option value="4">4</option>
-    <option value="5">5</option>
-  </select>
-
-  <div style="margin:10px 0;">
-    <label style="display:flex; align-items:center; font-weight:normal;">
-      <input type="checkbox" id="showReason">
-      <span>数字選択の根拠を表示する</span>
-    </label>
+<div class="storage-row">
+  <div id="storageNotice" class="notice" style="display:none;">
+    この端末に情報が保存されています
   </div>
+  <button class="sub" onclick="clearStorage()">保存情報を削除</button>
+</div>
 
-  <label>占い寄り ←→ ランダム寄り</label>
-  <input type="range" id="fortuneRate" min="0" max="100" value="50">
-  <div class="slider-label">
-    <span>占い重視</span>
-    <span>ランダム重視</span>
-  </div>
+<input id="drawDate" type="date">
 
-  <div class="button-group">
-    <button class="btn-loto6" onclick="generateNumbers('loto6')">ロト6</button>
-    <button class="btn-loto7" onclick="generateNumbers('loto7')">ロト7</button>
-  </div>
+<select id="patterns">
+  <option value="1">1パターン</option>
+  <option value="2">2パターン</option>
+  <option value="3">3パターン</option>
+  <option value="4">4パターン</option>
+  <option value="5">5パターン</option>
+</select>
 
-  <div id="results" class="results"></div>
+<label>
+  <input type="checkbox" id="showReason">
+  数字選択の根拠を表示
+</label>
 
-  <!-- ✅ プライバシーポリシー表示（復活） -->
-  <div class="footer">
-    <a href="privacy_policy.html">プライバシーポリシー</a>
-    <span>|</span>
-    <a href="#">お問い合わせ</a>
-  </div>
+<label>占い寄り / ランダム寄り</label>
+<input type="range" id="fortuneRate" min="0" max="100" value="50">
+
+<button class="loto6" onclick="generateNumbers('loto6')">ロト6</button>
+<button class="loto7" onclick="generateNumbers('loto7')">ロト7</button>
+
+<div id="result"></div>
+</div>
+
+<div class="footer">
+  <a href="privacy_policy.html">プライバシーポリシー</a>
+</div>
+
+<div class="cookie-banner" id="cookieBanner">
+このサイトは利便性向上のためCookieを使用します。
+<button onclick="acceptCookie()">同意する</button>
 </div>
 
 <script>
-function hashSeed(str){
-  let h=0;
-  for(let i=0;i<str.length;i++){
-    h=(h<<5)-h+str.charCodeAt(i);
-    h|=0;
+const STORAGE_KEY = 'loto_user_profile';
+const COOKIE_KEY = 'cookie_consent';
+
+const nameEl = document.getElementById('name');
+const birthEl = document.getElementById('birthdate');
+const drawEl = document.getElementById('drawDate');
+const patternsEl = document.getElementById('patterns');
+const fortuneRateEl = document.getElementById('fortuneRate');
+const noticeEl = document.getElementById('storageNotice');
+const resultEl = document.getElementById('result');
+
+function loadProfile() {
+  const d = localStorage.getItem(STORAGE_KEY);
+  if (!d) return;
+  const o = JSON.parse(d);
+  nameEl.value = o.name || '';
+  birthEl.value = o.birthdate || '';
+  noticeEl.style.display = 'block';
+}
+
+function saveProfile() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({
+    name: nameEl.value,
+    birthdate: birthEl.value
+  }));
+  noticeEl.style.display = 'block';
+}
+
+function clearStorage() {
+  localStorage.removeItem(STORAGE_KEY);
+  nameEl.value = '';
+  birthEl.value = '';
+  noticeEl.style.display = 'none';
+}
+
+function acceptCookie() {
+  localStorage.setItem(COOKIE_KEY, 'yes');
+  document.getElementById('cookieBanner').style.display = 'none';
+}
+if (!localStorage.getItem(COOKIE_KEY)) {
+  document.getElementById('cookieBanner').style.display = 'block';
+}
+
+function hashSeed(str) {
+  let h = 0;
+  for (let i = 0; i < str.length; i++) {
+    h = (h << 5) - h + str.charCodeAt(i);
+    h |= 0;
   }
   return Math.abs(h);
 }
 
-function seededRandom(seed){
-  const x=Math.sin(seed)*10000;
-  return x-Math.floor(x);
+function seededRandom(seed) {
+  const x = Math.sin(seed) * 10000;
+  return x - Math.floor(x);
 }
 
-function generateNumbers(type){
-  const name=nameEl.value;
-  const birth=birthEl.value;
-  const draw=drawEl.value;
-  const patterns=parseInt(patternsEl.value);
-  const showReason=showReasonEl.checked;
-  const fortuneRate=parseInt(fortuneRateEl.value);
+function generatePattern(seed, max, count) {
+  const s = new Set();
+  let i = seed;
+  while (s.size < count) {
+    s.add(Math.floor(seededRandom(i++) * max) + 1);
+  }
+  return [...s].sort((a, b) => a - b);
+}
 
-  if(!name||!birth||!draw){
+function generateNumbers(type) {
+  if (!nameEl.value || !birthEl.value || !drawEl.value) {
     alert('すべて入力してください');
     return;
   }
 
-  const max=type==='loto6'?43:37;
-  const count=type==='loto6'?6:7;
-  const baseSeed=hashSeed(name+birth+draw+type+fortuneRate);
+  saveProfile();
 
-  const results=[];
-  for(let i=0;i<patterns;i++){
-    results.push(generatePattern(baseSeed+i,max,count,fortuneRate));
+  const max = type === 'loto6' ? 43 : 37;
+  const count = type === 'loto6' ? 6 : 7;
+  const base = hashSeed(
+    nameEl.value + birthEl.value + drawEl.value + fortuneRateEl.value
+  );
+
+  resultEl.innerHTML = '';
+  for (let i = 0; i < patternsEl.value; i++) {
+    const nums = generatePattern(base + i, max, count);
+    const line = document.createElement('div');
+    line.className = 'result-line';
+    nums.forEach(n => {
+      const ball = document.createElement('span');
+      ball.className = 'ball';
+      ball.textContent = n;
+      line.appendChild(ball);
+    });
+    resultEl.appendChild(line);
   }
-
-  render(results,type,showReason);
 }
 
-function generatePattern(seed,max,count,fortuneRate){
-  const candidates=new Set();
-  const reasoning=[];
-  let s=seed;
-
-  const add=n=>{
-    if(n>=1&&n<=max) candidates.add(n);
-  };
-
-  if(fortuneRate<100){
-    add(seed%max+1);
-    reasoning.push('名前・生年月日からの数秘術');
-
-    add((seed*3)%max+1);
-    reasoning.push('運勢計算による派生数');
-  }
-
-  while(candidates.size<count){
-    const r=seededRandom(s++);
-    if(r*100<fortuneRate){
-      add(Math.floor(r*max)+1);
-    }else{
-      add((s*7)%max+1);
-    }
-  }
-
-  return {
-    numbers:[...candidates].sort((a,b)=>a-b),
-    reasoning
-  };
-}
-
-function render(results,type,showReason){
-  const div=document.getElementById('results');
-  div.innerHTML=`<h2 style="color:#667eea;">${type==='loto6'?'ロト6':'ロト7'} 生成結果</h2>`;
-
-  results.forEach((r,i)=>{
-    div.innerHTML+=`
-      <div class="result-card">
-        <strong>パターン ${i+1}</strong>
-        <div class="numbers">
-          ${r.numbers.map(n=>`<div class="number-ball">${n}</div>`).join('')}
-        </div>
-        ${showReason ? `
-        <div class="reasoning">
-          <div class="reasoning-title">📊 数字選択の根拠</div>
-          ${r.reasoning.map(t=>`<div class="reasoning-item">• ${t}</div>`).join('')}
-        </div>` : ''}
-      </div>
-    `;
-  });
-}
-
-const nameEl=document.getElementById('name');
-const birthEl=document.getElementById('birthdate');
-const drawEl=document.getElementById('drawDate');
-const patternsEl=document.getElementById('patterns');
-const showReasonEl=document.getElementById('showReason');
-const fortuneRateEl=document.getElementById('fortuneRate');
-
-drawEl.value=new Date().toISOString().split('T')[0];
+drawEl.value = new Date().toISOString().split('T')[0];
+patternsEl.value = '1';
+loadProfile();
 </script>
 </body>
 </html>
